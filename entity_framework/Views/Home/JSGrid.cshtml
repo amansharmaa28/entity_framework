@@ -1,0 +1,97 @@
+﻿<html>
+<head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+</head>
+<body>
+
+
+    <div id="jsGrid"></div>
+    <script>
+        $(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetDetails",
+            }).done(function (data) {
+
+                $("#jsGrid").jsGrid({
+                    height: "auto",
+                    width: "100%",
+                    editing: true,
+                    inserting: true,
+                    filtering: true,
+                    sorting: true,
+                    paging: true,
+                    autoload: true,
+                    pageSize: 10,
+                    fields: [{
+                        name: "id",
+                        type: "number",
+                        width: 150
+                    }, {
+                        name: "name",
+                        type: "text",
+                        width: 150
+                    },
+                    {
+                        name: "age",
+                        type: "number",
+                        width: 150
+                    },
+                    {
+                        name: "city",
+                        type: "text",
+                        width: 150
+                    }, {
+                        name: "price",
+                        type: "number",
+                        width: 150
+                    }, { type: "control" }],
+
+                    controller: {
+                        loadData: function (filter) {
+                            return $.grep(data, function (item) {
+
+                                return (!filter.id || item.id.indexOf(filter.id) > -1)
+                                    && (!filter.name || item.Name.indexOf(filter.name) > -1)
+                                    && (!filter.age || item.age.indexOf(filter.age) > -1)
+                                    && (!filter.city || item.city.indexOf(filter.city) > -1)
+                                    && (!filter.price || item.price.indexOf(filter.price) > -1);
+                            });
+                        },
+                        insertItem: function (item) {
+                            alert("entering");
+                            return $.ajax({
+                                type: "POST",
+                                url: "/Home/Create",
+                                data: item
+                            });
+                        },
+
+                        updateItem: function (e) {
+                            alert("Updated");
+                            return $.ajax({
+                                type: "POST",
+                                url: "/Home/Edit",
+                                data: e
+                            });
+                        },
+                        deleteItem: function (Id) {
+                            alert("Deleting");
+                            return $.ajax({
+                                type: "POST",
+                                url: "/Home/Delete",
+                                data: Id
+                            });
+                        },
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<entity_framework.Models.Emp>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Welcome to grid table</title>
+
+    <link href="https://kendo.cdn.telerik.com/themes/6.7.0/default/default-main.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://kendo.cdn.telerik.com/themes/6.7.0/default/default-main.css" rel="stylesheet" />
+    <script src="https://kendo.cdn.telerik.com/2023.2.829/js/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/themes/6.7.0/default/default-main.css" />
+    <script src="https://kendo.cdn.telerik.com/2023.2.829/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.2.829/mjs/kendo.all.js" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.2.829/js/jquery.min.js"></script>
+
+</head>
+<body>
+    <h1 class="text-center">Registered User Detail</h1>
+    <div class="container">
+        <div id="grid"></div>
+    </div>
+
+    <script>
+        var registration = @Html.Raw(Json.Serialize(Model));
+
+        console.log(registration);
+        $(document).ready(function () {
+            $("#grid").kendoGrid({
+                dataSource: {
+                    data: registration,
+                    schema: {
+                        model: {
+                            id: "id", // Specify the unique identifier for your data
+                            fields: {
+                                id: { type: "number" },
+                                name: { type: "string" },
+                                age: { type: "number" },
+                                city: { type: "string" },
+                                price: { type: "number" }
+
+
+                            }
+                        }
+                    },
+                    //pageSize: 7,
+                    serverPaging: false, // Disable server paging to allow client-side editing
+                },
+                height: 500,
+                scrollable: true,
+                sortable: true,
+                filterable: true,
+                groupable: true,
+                editable: "inline", // Enable inline editing
+                selectable: "row", // Allow row selection
+                pageable: {
+                    input: true,
+                    numeric: false
+                },
+                columns: [
+                    { field: "id", title: "Id", width: "130px" },
+                    { field: "name", title: "Name", width: "130px" },
+                    { field: "age", title: "Age", width: "130px" },
+                    { field: "city", title: "City", width: "130px" },
+                    { field: "price", title: "price", width: "130px" },
+
+                    {
+                        command: ["edit", "destroy"], // Add edit and delete buttons
+                        title: "&nbsp;", // Add an empty column for the command buttons
+                        width: "200px"
+                    }
+                ],
+                save: function (e) {
+                    // Handle the save event to send updates to the server
+                    $.ajax({
+                        url: '/Home/Update',
+                        type: 'POST',
+                        data: e.model.toJSON(), // Send the edited data to the server
+                        success: function (response) {
+                            if (response.success) {
+                                // Data updated successfully
+                                $("#grid").data("kendoGrid").dataSource.read(); // Refresh the grid
+                                alert("Data Updated Successfully");
+                            } else {
+                                alert("Error in updation");
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred while handling the data");
+                        }
+                    });
+                },
+                destroy: {
+                    url: function (dataItem) {
+                        return '/Home/Delete' + dataItem.userID; // URL to the Delete action with the UserID parameter
+                    },
+                    type: "POST", // HTTP method
+                    dataType: "json", // Data type of the response
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                        alert("Error occurred during deletion.");
+                    }
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

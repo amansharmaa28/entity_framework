@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Ag-Grid Basic Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+
+    <div id="AGGrid" style="height: 500px; width:1000px;" class="ag-theme-alpine"></div>
+    <script>
+        var fetchgrid = @Html.Raw(Json.Serialize(Model));
+
+        const columnDefs = [
+            { field: "name", filter: 'agsetColumnFilter' , editable:true},
+            { field: "city", filter: 'agsetColumnFilter', editable: true },
+            { field: "age", filter: 'agNumberColumnFilter', editable: true },
+            { field: "price", filter: 'agNumberColumnFilter', editable: true },
+
+        {
+            headerName:'Action',
+                cellRenderer: function (params) {
+                return '<button class="btn-delete" onclick="deleteItem(${params.data.id})">Delete</button>';
+            },
+            editable:false
+
+        }
+        ];
+        const gridOptions = {
+            columnDefs: columnDefs,
+            rowData: fetchgrid,
+            onCellValueChanged: function (params) {
+                debugger;
+   
+                var updatedData = params.data; 
+                sendUpdatedDataToServer(updatedData);
+            },
+
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridDiv = document.querySelector('#AGGrid');
+            new agGrid.Grid(gridDiv, gridOptions);
+        });
+        function deselect() {
+            gridOptions.api.deselectAll()
+        }
+
+        function sendUpdatedDataToServer(updatedData) {
+            debugger;
+       
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Home/Up/', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            var updatedDataJson = JSON.stringify(updatedData);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    console.log('Data saved successfully:', updatedDataJson);
+                } else {
+                    console.error('Error saving data:', xhr.responseText);
+                }
+            };
+            xhr.send(updatedDataJson);
+        }
+
+    </script>
+</body>
+
+</html>

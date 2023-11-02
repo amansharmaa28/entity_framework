@@ -1,0 +1,45 @@
+﻿@model entity_framework.Models.Emp
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Emp</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.city)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.city)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.age)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.age)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.price)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Go to List</a>
+    </form>
+</div>

@@ -1,0 +1,87 @@
+﻿@model List<entity_framework.Models.Emp>
+
+@{
+    ViewData["Title"] = "listView"
+    ;
+}
+
+<html>
+<head>
+    <title>lIST View</title>
+    <link href="https://kendo.cdn.telerik.com/themes/6.7.0/default/default-main.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> *
+    <script src="https://kendo.cdn.telerik.com/2023.2.829/js/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2023.2.829/js/kendo.all.min.js"></script>
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div id="listView"></div>
+                <div> </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/x-kendo-template" id="template">
+
+        <div style="color:blue; width:40%;height:10%;left-margin:40px;" class="Emp-data, style="">
+              <div id="resize">
+                <h6>ID-#:id#</h6>
+                <h6>Name-#:name#</h6>
+                <h6>City-#:city#</h6>
+                <h6>Age-#:age#</h6>
+                <h6>Price-#:price#</h6>
+           </div>
+        </div>
+    </script>
+
+    <script>
+        var Lists = @Html.Raw(Json.Serialize(Model));
+        console.log(Lists);
+        $(document).ready(function () {
+            var dataSource = new kendo.data.DataSource({
+                data: @Html.Raw(Json.Serialize(Model))
+                    });
+
+
+        });
+
+        $("#listView").kendoListView({
+            dataSource: {
+                data: Lists,
+                pageSize: 2
+            },
+            template: kendo.template($("#template").html()),
+            pageable: true,
+            scrollable: false,
+            filterable: true
+        });
+    </script>
+    <style>
+        #listView {
+            background-color: #DAF7A6;
+       
+        }
+
+        #resize{
+            width:40%;
+            height:10%;
+            color:red;
+            margin-left:40%;
+        }
+
+        .container {
+            height:10%;
+            width:100%;
+        }
+
+        h6{
+            width:400%;
+        }
+    </style>
+</body>
+</html>

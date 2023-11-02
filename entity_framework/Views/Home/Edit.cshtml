@@ -1,0 +1,95 @@
+﻿@model entity_framework.Models.Emp
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<link href="https://kendo.cdn.telerik.com/themes/6.7.0/default/default-main.css" rel="stylesheet" />
+<script src="https://kendo.cdn.telerik.com/2023.2.829/js/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+
+<script src="https://kendo.cdn.telerik.com/2023.2.829/js/kendo.all.min.js"></script>
+
+<h1>Edit</h1>
+
+<h4>Emp</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" />
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <label asp-for="age" class="control-label"></label>
+                <input asp-for="age" class="form-control" />
+                <span asp-validation-for="age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="city" class="control-label"></label>
+                <input asp-for="city" id="city " class="form-control" />
+                <span asp-validation-for="city" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="price" class="control-label"></label>
+                <input asp-for="price" class="form-control" />
+                <span asp-validation-for="price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<script>
+    var Source = new kendo.data.DataSource({
+        data: [
+            { CityID: 1, CityName: "Lisboa" },
+            { CityID: 2, CityName: "Moscow" },
+            { CityID: 3, CityName: "Napoli" },
+            { CityID: 4, CityName: "Tokyo" },
+            { CityID: 5, CityName: "Oslo" },
+            { CityID: 6, CityName: "Pаris" },
+            { CityID: 7, CityName: "Porto" },
+            { CityID: 8, CityName: "Rome" },
+            { CityID: 9, CityName: "Berlin" },
+            { CityID: 10, CityName: "Nice" },
+            { CityID: 11, CityName: "New York" },
+            { CityID: 12, CityName: "Sao Paulo" },
+            { CityID: 13, CityName: "Rio De Janeiro" },
+            { CityID: 14, CityName: "Venice" },
+            { CityID: 15, CityName: "Los Angeles" },
+            { CityID: 16, CityName: "Madrid" },
+            { CityID: 17, CityName: "Barcelona" },
+            { CityID: 18, CityName: "Prague" },
+            { CityID: 19, CityName: "Mexico City" },
+            { CityID: 20, CityName: "Buenos Aires" }
+        ],
+        sort: { field: "CityName", dir: "asc" }
+    });
+
+    $("#city").kendoDropDownList({
+        filter: "contains",
+        optionLabel: 'Please select city...',
+        dataTextField: "CityName",
+        dataValueField: "city",
+        height: "400px",
+        dataSource: Source
+    });
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
